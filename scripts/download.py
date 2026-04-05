@@ -16,11 +16,11 @@ JSON_DIR = OUTPUT_DIR / "json"
 OBJECTBOX_DIR = OUTPUT_DIR / "objectbox"
 
 DATA_SOURCES = {
-    "chinese_xinhua": "https://cdn.jsdelivr.net/gh/pwxcoo/chinese-xinhua@master/data",
-    "chinese_poetry": "https://cdn.jsdelivr.net/gh/chinese-poetry/chinese-poetry@master",
-    "couplet": "https://cdn.jsdelivr.net/gh/wb14123/couplet-dataset@master",
-    "riddles": "https://cdn.jsdelivr.net/gh/pku0xff/CC-Riddle@master",
-    "chinese_colors": "https://cdn.jsdelivr.net/gh/zerosoul/chinese-colors@master",
+    "chinese_xinhua": "https://raw.githubusercontent.com/pwxcoo/chinese-xinhua/master/data",
+    "chinese_poetry": "https://raw.githubusercontent.com/chinese-poetry/chinese-poetry/master",
+    "riddles": "https://raw.githubusercontent.com/pku0xff/CC-Riddle/main",
+    "chinese_colors": "https://raw.githubusercontent.com/zerosoul/chinese-colors/master/src/assets",
+    "couplet": "https://raw.githubusercontent.com/v-zich/couplet-clean-dataset/master/couplets",
 }
 
 if OBJECTBOX_AVAILABLE:
@@ -88,7 +88,7 @@ def ensure_dirs():
 def download(url: str, max_retries: int = 3) -> requests.Response | None:
     for attempt in range(max_retries):
         try:
-            response = requests.get(url, timeout=60)
+            response = requests.get(url, timeout=120)
             if response.status_code == 200:
                 return response
         except Exception as e:
@@ -107,6 +107,7 @@ def download_xinhua_data(filename: str, result_fields: list) -> list:
     url = f"{DATA_SOURCES['chinese_xinhua']}/{filename}"
     response = download(url)
     if not response:
+        print(f"  下载失败: {url}")
         return []
     data = response.json()
     result = []
@@ -118,33 +119,93 @@ def download_xinhua_data(filename: str, result_fields: list) -> list:
     save_json(result, filename)
     return result
 
-def download_riddles() -> list:
-    url = f"{DATA_SOURCES['riddles']}/riddles.json"
+def download_characters() -> list:
+    print("\n[汉字]")
+    url = f"{DATA_SOURCES['chinese_xinhua']}/word.json"
     response = download(url)
     if not response:
+        print(f"  下载失败: {url}")
         return []
     data = response.json()
-    result = [{
-        "id": i + 1,
-        "question": item.get("question", ""),
-        "answer": item.get("answer", ""),
-        "source": item.get("source", ""),
-    } for i, item in enumerate(data)]
+    result = []
+    for i, item in enumerate(data):
+        strokes_val = item.get("strokes", 0)
+        try:
+            strokes_int = int(strokes_val) if strokes_val else 0
+        except (ValueError, TypeError):
+            strokes_int = 0
+        result.append({
+            "id": i + 1,
+            "character": item.get("word", ""),
+            "pinyin": item.get("pinyin", ""),
+            "strokes": strokes_int,
+            "radical": item.get("radicals", ""),
+            "explanation": item.get("explanation", ""),
+        })
+    save_json(result, "characters.json")
+    return result
+
+def download_words() -> list:
+    print("\n[词语]")
+    url = f"{DATA_SOURCES['chinese_xinhua']}/ci.json"
+    response = download(url)
+    if not response:
+        print(f"  下载失败: {url}")
+        return []
+    data = response.json()
+    result = []
+    for i, item in enumerate(data):
+        result.append({
+            "id": i + 1,
+            "ci": item.get("ci", ""),
+            "explanation": item.get("explanation", ""),
+        })
+    save_json(result, "words.json")
+    return result
+
+def download_riddles() -> list:
+    print("\n[谜语]")
+    url = f"{DATA_SOURCES['riddles']}/CC-Riddle.jsonl"
+    response = download(url)
+    if not response:
+        print(f"  下载失败: {url}")
+        return []
+    lines = response.text.strip().split('\n')
+    result = []
+    for i, line in enumerate(lines):
+        try:
+            item = json.loads(line)
+            result.append({
+                "id": i + 1,
+                "question": item.get("question", ""),
+                "answer": item.get("answer", ""),
+                "source": item.get("source", ""),
+            })
+        except:
+            continue
     save_json(result, "riddles.json")
     return result
 
 def download_chinese_colors() -> list:
+    print("\n[传统色]")
     url = f"{DATA_SOURCES['chinese_colors']}/colors.json"
     response = download(url)
     if not response:
+        print(f"  下载失败: {url}")
         return []
     data = response.json()
-    result = [{
-        "id": i + 1,
-        "name": item.get("name", ""),
-        "hex": item.get("hex", ""),
-        "intro": item.get("intro", ""),
-    } for i, item in enumerate(data)]
+    result = []
+    color_id = 1
+    for category in data:
+        colors = category.get("colors", [])
+        for color in colors:
+            result.append({
+                "id": color_id,
+                "name": color.get("name", ""),
+                "hex": color.get("hex", ""),
+                "intro": color.get("intro", ""),
+            })
+            color_id += 1
     save_json(result, "chinese_colors.json")
     return result
 
@@ -318,20 +379,10 @@ def main():
     all_data["idioms"] = download_xinhua_data(
         "idiom.json", ["word", "pinyin", "explanation", "derivation"])
     
-    print("\n[汉字]")
-    all_data["characters"] = download_xinhua_data(
-        "char.json", ["word", "pinyin", "strokes", "radical", "explanation"])
-    
-    print("\n[词语]")
-    all_data["words"] = download_xinhua_data(
-        "word.json", ["ci", "explanation"])
-    
-    print("\n[谜语]")
+    all_data["characters"] = download_characters()
+    all_data["words"] = download_words()
     all_data["riddles"] = download_riddles()
-    
-    print("\n[传统色]")
     all_data["chinese_colors"] = download_chinese_colors()
-    
     all_data["poems"] = download_poems()
     all_data["couplets"] = download_couplets()
     
