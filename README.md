@@ -17,7 +17,7 @@ cd scripts && python download.py
 
 | 类别 | 数量 |
 |:-----|------|
-| 诗词 | 65,185 |
+| 诗词 | 319,422 |
 | 对联 | 744,930 |
 | 词语 | 264,434 |
 | 成语 | 30,895 |
@@ -25,7 +25,7 @@ cd scripts && python download.py
 | 汉字 | 16,142 |
 | 歇后语 | 14,032 |
 | 传统色 | 161 |
-| **总计** | **1,163,266** |
+| **总计** | **1,417,333** |
 
 ## 输出
 
@@ -39,7 +39,8 @@ output/
 ## 致谢
 
 数据来源：
-- [chinese-poetry](https://github.com/chinese-poetry/chinese-poetry) - 古典文集
+- [chinese-poetry](https://github.com/chinese-poetry/chinese-poetry) - 古典文集（唐诗、宋词、元曲）
+- [Chinese-Poetry-Dataset](https://github.com/iphinsau/Chinese-Poetry-Dataset) - 宋诗
 - [chinese-xinhua](https://github.com/pwxcoo/chinese-xinhua) - 新华字典
 - [couplet-clean-dataset](https://github.com/v-zich/couplet-clean-dataset) - 对联
 - [CC-Riddle](https://github.com/pku0xff/CC-Riddle) - 谜语

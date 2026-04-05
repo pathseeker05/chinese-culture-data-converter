@@ -18,6 +18,7 @@ OBJECTBOX_DIR = OUTPUT_DIR / "objectbox"
 DATA_SOURCES = {
     "chinese_xinhua": "https://raw.githubusercontent.com/pwxcoo/chinese-xinhua/master/data",
     "chinese_poetry": "https://raw.githubusercontent.com/chinese-poetry/chinese-poetry/master",
+    "song_poetry": "https://raw.githubusercontent.com/iphinsau/Chinese-Poetry-Dataset/master/json",
     "riddles": "https://raw.githubusercontent.com/pku0xff/CC-Riddle/main",
     "chinese_colors": "https://raw.githubusercontent.com/zerosoul/chinese-colors/master/src/assets",
     "couplet": "https://raw.githubusercontent.com/v-zich/couplet-clean-dataset/master/couplets",
@@ -249,8 +250,8 @@ def download_poems() -> list:
     
     print("  全宋诗...")
     count = len(poems)
-    for i in range(0, 26000, 1000):
-        url = f"{DATA_SOURCES['chinese_poetry']}/全宋诗/poet.song.{i}.json"
+    for i in range(0, 255000, 1000):
+        url = f"{DATA_SOURCES['song_poetry']}/poet.song.{i}.json"
         response = download(url)
         if response:
             for item in response.json():
