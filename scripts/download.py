@@ -6,7 +6,7 @@ from pathlib import Path
 import requests
 
 try:
-    from objectbox import Store, Model, Entity, Id, String, Int32
+    from objectbox import Store, Entity, Id, String, Int32
     OBJECTBOX_AVAILABLE = True
 except ImportError:
     OBJECTBOX_AVAILABLE = False
@@ -22,6 +22,64 @@ DATA_SOURCES = {
     "riddles": "https://cdn.jsdelivr.net/gh/pku0xff/CC-Riddle@master",
     "chinese_colors": "https://cdn.jsdelivr.net/gh/zerosoul/chinese-colors@master",
 }
+
+if OBJECTBOX_AVAILABLE:
+    @Entity()
+    class Poem:
+        id = Id()
+        title = String()
+        author = String()
+        dynasty = String()
+        content = String()
+
+    @Entity()
+    class Idiom:
+        id = Id()
+        word = String()
+        pinyin = String()
+        explanation = String()
+        derivation = String()
+
+    @Entity()
+    class AllegoricalSaying:
+        id = Id()
+        riddle = String()
+        answer = String()
+
+    @Entity()
+    class Couplet:
+        id = Id()
+        firstLine = String()
+        secondLine = String()
+
+    @Entity()
+    class Riddle:
+        id = Id()
+        question = String()
+        answer = String()
+        source = String()
+
+    @Entity()
+    class Character:
+        id = Id()
+        character = String()
+        pinyin = String()
+        strokes = Int32()
+        radical = String()
+        explanation = String()
+
+    @Entity()
+    class Word:
+        id = Id()
+        ci = String()
+        explanation = String()
+
+    @Entity()
+    class ChineseColor:
+        id = Id()
+        name = String()
+        hex = String()
+        intro = String()
 
 def ensure_dirs():
     JSON_DIR.mkdir(parents=True, exist_ok=True)
@@ -198,88 +256,29 @@ def create_objectbox_database(data: dict):
     
     print("\n[ObjectBox] 生成数据库...")
     
-    @Entity
-    class Poem:
-        id = Id()
-        title = String()
-        author = String()
-        dynasty = String()
-        content = String()
-    
-    @Entity
-    class Idiom:
-        id = Id()
-        word = String()
-        pinyin = String()
-        explanation = String()
-        derivation = String()
-    
-    @Entity
-    class AllegoricalSaying:
-        id = Id()
-        riddle = String()
-        answer = String()
-    
-    @Entity
-    class Couplet:
-        id = Id()
-        firstLine = String()
-        secondLine = String()
-    
-    @Entity
-    class Riddle:
-        id = Id()
-        question = String()
-        answer = String()
-        source = String()
-    
-    @Entity
-    class Character:
-        id = Id()
-        character = String()
-        pinyin = String()
-        strokes = Int32()
-        radical = String()
-        explanation = String()
-    
-    @Entity
-    class Word:
-        id = Id()
-        ci = String()
-        explanation = String()
-    
-    @Entity
-    class ChineseColor:
-        id = Id()
-        name = String()
-        hex = String()
-        intro = String()
-    
-    model = Model()
-    entities = [Poem, Idiom, AllegoricalSaying, Couplet, Riddle, Character, Word, ChineseColor]
-    for entity in entities:
-        model.add_entity(entity)
-    
     if OBJECTBOX_DIR.exists():
         import shutil
         shutil.rmtree(OBJECTBOX_DIR)
     OBJECTBOX_DIR.mkdir(parents=True, exist_ok=True)
     
-    store = Store(model=model, directory=str(OBJECTBOX_DIR))
+    store = Store(directory=str(OBJECTBOX_DIR))
     
-    def insert(entity_class, items: list, field_map: dict):
+    def insert(entity_class, items: list, field_map: dict, batch_size: int = 10000):
         if not items:
             return
         box = store.box(entity_class)
-        entities = []
-        for item in items:
-            entity = entity_class()
-            for src, dst in field_map.items():
-                value = item.get(src)
-                setattr(entity, dst, value if value is not None else "")
-            entities.append(entity)
-        box.put(*entities)
-        print(f"  {entity_class.__name__}: {len(entities):,} 条")
+        total = len(items)
+        for i in range(0, total, batch_size):
+            batch = items[i:i + batch_size]
+            entities = []
+            for item in batch:
+                entity = entity_class()
+                for src, dst in field_map.items():
+                    value = item.get(src)
+                    setattr(entity, dst, value if value is not None else "")
+                entities.append(entity)
+            box.put(*entities)
+        print(f"  {entity_class.__class__.__name__}: {total:,} 条")
     
     insert(Poem, data.get("poems", []), 
            {"title": "title", "author": "author", "dynasty": "dynasty", "content": "content"})

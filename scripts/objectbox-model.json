@@ -1,0 +1,239 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "modelVersionParserMinimum": 5,
+  "entities": [
+    {
+      "id": "1:5138689974812837194",
+      "name": "Poem",
+      "lastPropertyId": "5:8555457517754422605",
+      "properties": [
+        {
+          "id": "1:2092154132757188441",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8672563413047427982",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "3:5466912638969577328",
+          "name": "author",
+          "type": 9
+        },
+        {
+          "id": "4:1579315928936075485",
+          "name": "dynasty",
+          "type": 9
+        },
+        {
+          "id": "5:8555457517754422605",
+          "name": "content",
+          "type": 9
+        }
+      ]
+    },
+    {
+      "id": "2:3835404907815727800",
+      "name": "Idiom",
+      "lastPropertyId": "5:261158313601471568",
+      "properties": [
+        {
+          "id": "1:3968121255767916431",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8553329578059715463",
+          "name": "word",
+          "type": 9
+        },
+        {
+          "id": "3:4332491910449251933",
+          "name": "pinyin",
+          "type": 9
+        },
+        {
+          "id": "4:6921009637449458400",
+          "name": "explanation",
+          "type": 9
+        },
+        {
+          "id": "5:261158313601471568",
+          "name": "derivation",
+          "type": 9
+        }
+      ]
+    },
+    {
+      "id": "3:8459453139415417600",
+      "name": "AllegoricalSaying",
+      "lastPropertyId": "3:4120252874179261267",
+      "properties": [
+        {
+          "id": "1:2148276261068406532",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8066095940029803981",
+          "name": "riddle",
+          "type": 9
+        },
+        {
+          "id": "3:4120252874179261267",
+          "name": "answer",
+          "type": 9
+        }
+      ]
+    },
+    {
+      "id": "4:6733639669014313072",
+      "name": "Couplet",
+      "lastPropertyId": "3:267558228280783991",
+      "properties": [
+        {
+          "id": "1:6699522448716242168",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1816942533708551130",
+          "name": "firstLine",
+          "type": 9
+        },
+        {
+          "id": "3:267558228280783991",
+          "name": "secondLine",
+          "type": 9
+        }
+      ]
+    },
+    {
+      "id": "5:8829709278046343028",
+      "name": "Riddle",
+      "lastPropertyId": "4:123166111069341589",
+      "properties": [
+        {
+          "id": "1:5350698984327621257",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8365546854183537471",
+          "name": "question",
+          "type": 9
+        },
+        {
+          "id": "3:7064020760632626022",
+          "name": "answer",
+          "type": 9
+        },
+        {
+          "id": "4:123166111069341589",
+          "name": "source",
+          "type": 9
+        }
+      ]
+    },
+    {
+      "id": "6:2457973436130635545",
+      "name": "Character",
+      "lastPropertyId": "6:3365472651526989353",
+      "properties": [
+        {
+          "id": "1:5398421242281898217",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5731950547804103849",
+          "name": "character",
+          "type": 9
+        },
+        {
+          "id": "3:7777249884059871139",
+          "name": "pinyin",
+          "type": 9
+        },
+        {
+          "id": "4:501311208075614740",
+          "name": "strokes",
+          "type": 5
+        },
+        {
+          "id": "5:7025245699339300924",
+          "name": "radical",
+          "type": 9
+        },
+        {
+          "id": "6:3365472651526989353",
+          "name": "explanation",
+          "type": 9
+        }
+      ]
+    },
+    {
+      "id": "7:2979839035019917214",
+      "name": "Word",
+      "lastPropertyId": "3:1238575630192955858",
+      "properties": [
+        {
+          "id": "1:5506157397098358099",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4080862617523690944",
+          "name": "ci",
+          "type": 9
+        },
+        {
+          "id": "3:1238575630192955858",
+          "name": "explanation",
+          "type": 9
+        }
+      ]
+    },
+    {
+      "id": "8:2317813331518468214",
+      "name": "ChineseColor",
+      "lastPropertyId": "4:1158706618833912945",
+      "properties": [
+        {
+          "id": "1:3180020349576209163",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:406963024289964779",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:4057588086824924305",
+          "name": "hex",
+          "type": 9
+        },
+        {
+          "id": "4:1158706618833912945",
+          "name": "intro",
+          "type": 9
+        }
+      ]
+    }
+  ],
+  "lastEntityId": "8:2317813331518468214",
+  "lastIndexId": "0:0"
+}
