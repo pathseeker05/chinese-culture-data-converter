@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+
+# Virtual Environment
+venv/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*~
+
+# Output
+output/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ObjectBox model cache (auto-generated)
+objectbox-model.json
